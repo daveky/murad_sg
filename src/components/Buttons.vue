@@ -59,13 +59,14 @@
 <script>
 export default {
   name: 'buttons',
-  pageTitle: 'Buttons',
   data () {
     return {
     }
   },
   created: function() {
-      this.$parent.$emit('setPageTitle', this.pageTitle)
+      this.$store.dispatch('set_pageTitle', {
+        sendPageTitle: 'Buttons'
+      })
   }
 }
 </script>

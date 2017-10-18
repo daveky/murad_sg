@@ -971,6 +971,11 @@ export default {
     return {
       msg: 'Welcome to Your Vue.js App'
     }
+  },
+  created: function() {
+      this.$store.dispatch('set_pageTitle', {
+        sendPageTitle: 'Header'
+      })
   }
 }
 </script>

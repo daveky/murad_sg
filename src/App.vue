@@ -59,8 +59,12 @@
 <script>
 export default {
   name: 'app',
+  computed: {
+    pageTitle: function() {
+      return this.$store.getters.pageTitle
+    },
+  },
   data: () => ({
-    pageTitle: '[pageTitle]',
     drawer: true,
     items: [
         {
