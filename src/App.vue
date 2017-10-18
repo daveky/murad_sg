@@ -44,7 +44,7 @@
       <v-toolbar-title style="width: 300px" class="ml-0 pl-3">
         <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       </v-toolbar-title>
-      <v-toolbar-title class="">{{ pageTitle }}</v-toolbar-title>
+      <v-toolbar-title>{{ pageTitle }}</v-toolbar-title>
     </v-toolbar>
     <main>
       <v-content>
@@ -87,7 +87,7 @@ export default {
 }
 </script>
 
-<style>
+<style src="./assets/scss/global.scss" lang="scss">
 .fadeIn {
   animation: fadein .5s;
 }
@@ -95,5 +95,19 @@ export default {
 @keyframes fadeIn {
     from { opacity: 0; }
     to   { opacity: 1; }
+}
+
+/* Enter and leave animations can use different */
+/* durations and timing functions.              */
+.slide-fade-enter-active {
+  transition: all .3s ease;
+}
+.slide-fade-leave-active {
+  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.slide-fade-enter, .slide-fade-leave-to
+/* .slide-fade-leave-active below version 2.1.8 */ {
+  transform: translateX(10px);
+  opacity: 0;
 }
 </style>

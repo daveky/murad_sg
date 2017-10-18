@@ -1,9 +1,6 @@
 <template>
   <div id="buttons" class="fadeIn">
     <v-container fluid>
-      <h1>
-        Buttons
-      </h1>
       <button class="button">Buy Now</button>
 
       <div class="product-essential">
