@@ -40,11 +40,11 @@
 
       </v-list>
     </v-navigation-drawer>
-    <v-toolbar color="transparent" flat dense fixed clipped-left app>
+    <v-toolbar color="white" flat dense fixed clipped-left app>
       <v-toolbar-title style="width: 300px" class="ml-0 pl-3">
         <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       </v-toolbar-title>
-      <v-toolbar-title>{{ pageTitle }}</v-toolbar-title>
+      <v-toolbar-title>{{ pageTitle }} page link is {{ pageLink }}</v-toolbar-title>
     </v-toolbar>
     <main>
       <v-content>
@@ -63,6 +63,9 @@ export default {
     pageTitle: function() {
       return this.$store.getters.pageTitle
     },
+    pageLink: function() {
+      return this.$store.getters.pageLink
+    }
   },
   data: () => ({
     drawer: true,
@@ -73,10 +76,12 @@ export default {
           items: [
             { title: 'Header', to: '/header' },
             { title: 'Buttons', to: '/buttons' },
-            { title: 'Breadcrumbs' },
+            { title: 'Breadcrumbs', to: '/breadcrumbs' },
             { title: 'Forms' },
-            { title: 'Lits' },
-            { title: 'Tabs' }
+            { title: 'Lists', to: '/lists' },
+            { title: 'Tabs', to: '/tabs' },
+            { title: 'Headings', to: '/headings' },
+            { title: 'Typeography', to: '/typeography' },
           ]
         },
       ]

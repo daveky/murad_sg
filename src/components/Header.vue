@@ -973,8 +973,9 @@ export default {
     }
   },
   created: function() {
-      this.$store.dispatch('set_pageTitle', {
-        sendPageTitle: 'Header'
+      this.$store.dispatch('EMIT_pageHeader', {
+        SEND_pageTitle: 'Header',
+        SEND_pageLink: '/about'
       })
   }
 }
