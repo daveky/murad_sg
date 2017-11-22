@@ -10,6 +10,17 @@
       <li><a href="https://help.murad.com/app/answers/detail/a_id/49/">Return Policy</a>
       </li>
     </ul>
+    <ul style="list-style: disc !important;margin: 3% 0 0 6%;">
+      <li>
+        Minimize dark circles
+      </li>
+      <li>
+        Reduce puffiness
+      </li>
+      <li>
+        Reduce crow’s feet
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -20,9 +31,10 @@ export default {
     return {
     }
   },
-  created: function() {
-      this.$store.dispatch('set_pageTitle', {
-        sendPageTitle: 'Lists'
+  beforeMount() {
+      this.$store.dispatch('EMIT_pageHeader', {
+        SEND_pageTitle: 'Lists',
+        SEND_pageLink: '/lists'
       })
   }
 }

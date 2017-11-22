@@ -972,11 +972,16 @@ export default {
       msg: 'Welcome to Your Vue.js App'
     }
   },
-  created: function() {
+  beforeMount() {
       this.$store.dispatch('EMIT_pageHeader', {
         SEND_pageTitle: 'Header',
-        SEND_pageLink: '/about'
+        SEND_pageLink: '/header'
       })
+  },
+  mounted() {
+    this.$nextTick( () => {
+      jQuery(document).ready(function(e){function n(){t()||i();}function i(){e("#custommenu-mobile").is(":visible")||(e(".mrd-ico-hamburger").removeClass("active"),e("div.parent-menu-content").addClass("is-hidden"),e("span.plusButton").removeClass("open"));}function t(){var e=window,n="inner";return"innerWidth"in window||(n="client",e=document.documentElement||document.body),e[n+"Width"]>=s;}var s=1170;n(),e(window).on("resize",function(){window.requestAnimationFrame?window.requestAnimationFrame(n):setTimeout(n,300);}),e("#primary-nav li.secondary-nav").on({mouseenter:function(n){t()||n.preventDefault();var i=e(this).children("div.top-level-menu");i.next("div.sec-nav-content").removeClass("is-hidden"),i.parent(".secondary-nav").siblings(".secondary-nav").children("div.sec-nav-content").addClass("is-hidden");},mouseleave:function(n){t()||n.preventDefault(),e(this).children("div.top-level-menu").next("div.sec-nav-content").addClass("is-hidden");}}),e(".mrd-ico-hamburger").click(function(){e(this).toggleClass("active");}),e(".plusButton").click(function(){if(e(this).hasClass("open")){e(this).removeClass("open");var n=e(this).parent("div.parent-menu");n.next("div.parent-menu-content").addClass("is-hidden");}else e(this).addClass("open"),(n=e(this).parent("div.parent-menu")).next("div.parent-menu-content").removeClass("is-hidden"),n.parent(".menu-mobile").siblings(".menu-mobile").children("div.parent-menu-content").addClass("is-hidden"),n.parent(".menu-mobile").siblings(".menu-mobile").children("div.parent-menu").children("span.plusButton").removeClass("open");});});
+    });
   }
 }
 </script>

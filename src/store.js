@@ -9,23 +9,23 @@ export default new Vuex.Store({
     pageLink: '[pageLink]'
   },
   getters: {
-    pageTitle: function(state) {
+    pageTitle(state) {
       return state.pageTitle
     },
-    pageLink: function(state) {
+    pageLink(state) {
       return state.pageLink
     }
   },
   mutations: {
-    SET_pageTitle: function(state, payload) {
+    SET_pageTitle(state, payload) {
       state.pageTitle = payload.SEND_pageTitle
     },
-    SET_pageLink: function(state, payload) {
+    SET_pageLink(state, payload) {
       state.pageLink = payload.SEND_pageLink
     }
   },
   actions: {
-    EMIT_pageHeader: function(context, payload) {
+    EMIT_pageHeader(context, payload) {
       context.commit('SET_pageTitle', payload)
       context.commit('SET_pageLink', payload)
     }

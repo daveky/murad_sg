@@ -25,9 +25,10 @@ export default {
     return {
     }
   },
-  created: function() {
-      this.$store.dispatch('set_pageTitle', {
-        sendPageTitle: 'Breadcrumbs'
+  beforeMount() {
+      this.$store.dispatch('EMIT_pageHeader', {
+        SEND_pageTitle: 'Breadcrumbs',
+        SEND_pageLink: '/breadcrumbs'
       })
   }
 }

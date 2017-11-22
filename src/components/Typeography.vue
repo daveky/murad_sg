@@ -1,5 +1,6 @@
 <template>
   <div id="sg_typeography">
+    <div ref="asdf">{{ test1 }}</div>
     <h1>
       H1 Heading 28px font-weight: 300 line-height: 1.2
     </h1>
@@ -38,18 +39,22 @@
 
 <script>
 export default {
-  name: 'tabs',
+  name: 'sg_typeography',
   data () {
     return {
+      test1: 'DAVE'
     }
   },
-  created: function() {
-      this.$store.dispatch('set_pageTitle', {
-        sendPageTitle: 'Typeography'
-      })
+  beforeMount() {
+    this.$store.dispatch('EMIT_pageHeader', {
+      SEND_pageTitle: 'Typography',
+      SEND_pageLink: '/typeography'
+    })
+    console.log('name = ' + this.name)
   }
 }
 </script>
+
 
 <style scoped>
   #sg_typeography { padding: 40px; }

@@ -40,9 +40,9 @@
 
       </v-list>
     </v-navigation-drawer>
-    <v-toolbar color="white" flat dense fixed clipped-left app>
+    <v-toolbar color="white" flat dense fixed clipped-left app style="padding: 0;">
       <v-toolbar-title style="width: 300px" class="ml-0 pl-3">
-        <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+        <v-toolbar-side-icon style="border:0;" @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       </v-toolbar-title>
       <v-toolbar-title>{{ pageTitle }} page link is {{ pageLink }}</v-toolbar-title>
     </v-toolbar>
@@ -60,10 +60,10 @@
 export default {
   name: 'app',
   computed: {
-    pageTitle: function() {
+    pageTitle() {
       return this.$store.getters.pageTitle
     },
-    pageLink: function() {
+    pageLink() {
       return this.$store.getters.pageLink
     }
   },
@@ -77,7 +77,7 @@ export default {
             { title: 'Header', to: '/header' },
             { title: 'Buttons', to: '/buttons' },
             { title: 'Breadcrumbs', to: '/breadcrumbs' },
-            { title: 'Forms' },
+            { title: 'Forms', to: '/forms' },
             { title: 'Lists', to: '/lists' },
             { title: 'Tabs', to: '/tabs' },
             { title: 'Headings', to: '/headings' },
@@ -92,4 +92,9 @@ export default {
 }
 </script>
 
-<style src="./assets/scss/global.scss" lang="scss"></style>
+<style lang="scss">
+@import './assets/scss/global.scss';
+.list--group__header a {
+  &:focus, &:hover { text-decoration: none; }
+}
+</style>

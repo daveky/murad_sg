@@ -503,7 +503,6 @@
   </div>
 </template>
 
-<script src="//s23.socialannex.com/v4/js/s23-main-curl.js"></script>
 <script>
 export default {
   name: 'tabs',
@@ -511,13 +510,208 @@ export default {
     return {
     }
   },
-  created: function() {
-      this.$store.dispatch('set_pageTitle', {
-        sendPageTitle: 'Tabs'
+  beforeMount() {
+      this.$store.dispatch('EMIT_pageHeader', {
+        SEND_pageTitle: 'Tabs',
+        SEND_pageLink: '/tabs'
       })
+  },
+  mounted() {
+    this.$nextTick( () => {
+      function show_reviews(link_type) {
+        jQuery(".toggle-tabs .current").removeClass("current");
+        jQuery("#collateral-tabs .current").removeClass("current");
+        jQuery('.product-collateral').addClass('accordion-open');
+        if (link_type == "qa") {
+          jQuery(".toggle-tabs li").last().addClass("current");
+          jQuery("#collateral-tabs dd").last().addClass("current");
+        } else {
+          jQuery(".toggle-tabs li").first().addClass("current");
+          jQuery("#collateral-tabs dd").first().addClass("current");
+        }
+        jQuery('html, body').animate({
+          scrollTop: jQuery(".toggle-content").offset().top
+        }, 1000);
+      }
+      jQuery(document).ready(function() {
+        $j('.sec-nav-content,.overlay-modal').mouseover(function() {
+          $j('.zoomContainer').css("position", "static");
+        });
+        $j('.sec-nav-content,.overlay-modal').mouseleave(function() {
+          $j('.zoomContainer').css("position", "absolute");
+        });
+        jQuery(".sku_variant span").each(function() {
+          var skuId = this.id;
+          jQuery("#" + skuId).on("click", function() {
+            if (!jQuery("#" + skuId).hasClass("selectsku")) {
+              jQuery(".sku_variant span").each(function() {
+                jQuery("#" + this.id).removeClass("selectsku");
+              });
+              jQuery("#" + skuId).addClass("selectsku");
+              var res = skuId.split("_");
+              var prdId = res[1];
+              var ajaxUrl = 'https://www.murad.com/productdetail/view/ajax/';
+              jQuery.ajax({
+                url: ajaxUrl,
+                data: {
+                  productId: prdId
+                },
+                method: 'POST',
+                beforeSend: function() {
+                  jQuery("#ajaxloader-outer").show();
+                },
+                success: function(resultObj) {
+                  jQuery("#ajaxloader-outer").hide();
+                  jQuery("#ingredients").html("");
+                  jQuery("#howtouse").html("");
+                  jQuery("#benefits").html("");
+                  jQuery(".press-awards").html('');
+                  jQuery("#product-carousel").empty();
+                  jQuery("#stockmsg").html("");
+                  jQuery("#addtowishlist").show();
+                  jQuery(".btn-cart").show();
+                  var skutext = resultObj.productsizetext;
+                  jQuery("#product_addtocart_form .product-name").html('<span class="h1">' + resultObj.name + '</span>');
+                  jQuery("#variantsku").html(resultObj.productsizetext);
+                  if (resultObj.stockstatus == 1) {
+                    jQuery("p.availability").removeClass().addClass("availability in-stock");
+                    jQuery("p.availability .value").html("In Stock");
+                  } else {
+                    jQuery("p.availability").removeClass().addClass("availability out-of-stock");
+                    jQuery("p.availability .value").html("Out of Stock");
+                  }
+                  if (jQuery('.shortdesc-mob').is(':visible')) {
+                    jQuery(".short-description").css('display', 'none');
+                  } else {
+                    jQuery(".short-description").css('display', 'block');
+                  }
+                  if (!jQuery.isEmptyObject(resultObj.desc)) jQuery(".short-description").html('<div class="std">' + resultObj.desc + '</div>');
+                  if (!jQuery.isEmptyObject(resultObj.short_desc)) jQuery(".shortdesc-mob").html('<div class="std">' + resultObj.short_desc + '</div>');
+                  if (!jQuery.isEmptyObject(resultObj.ingredients)) jQuery("#ingredients").html(resultObj.ingredients);
+                  if (!jQuery.isEmptyObject(resultObj.howtouse)) jQuery("#howtouse").html(resultObj.howtouse);
+                  if (!jQuery.isEmptyObject(resultObj.benefits)) jQuery("#benefits").html(resultObj.benefits);
+                  if (!jQuery.isEmptyObject(resultObj.press)) jQuery(".press-awards").html(resultObj.press);
+                  if (!jQuery.isEmptyObject(resultObj.short_legal_text)) jQuery(".add-to-bag-clubkit-mob").html(resultObj.short_legal_text);
+                  if (resultObj.url != '') {
+                    jQuery(".price-info").html(resultObj.price);
+                    jQuery('#product_addtocart_form').attr('action', resultObj.url);
+                    $j('.add-to-cart-buttons button').data('product_id', resultObj.id);
+                  }
+                  if (resultObj.price != '') {
+                    jQuery(".price-info").html(resultObj.price);
+                    jQuery("#onetime_price").html(resultObj.price);
+                  }
+                  if (resultObj.productqty != '') {}
+                  if (!jQuery.isEmptyObject(resultObj.outofstock)) {
+                    jQuery("#stockmsg").html(resultObj.outofstock);
+                    jQuery(".btn-cart").hide();
+                    jQuery("#addtowishlist").hide();
+                  } else {
+                    if (!jQuery.isEmptyObject(resultObj.backorder)) {
+                      jQuery("#stockmsg").html(resultObj.backorder);
+                      jQuery("#addtowishlist").show();
+                      jQuery(".btn-cart").show();
+                    } else {
+                      jQuery("#addtowishlist").show();
+                      jQuery(".btn-cart").show();
+                    }
+                  }
+                  if (!jQuery.isEmptyObject(resultObj.mainimage)) {
+                    jQuery(".product-image-gallery").empty();
+                    jQuery(".product-image-gallery").html(resultObj.mainimage);
+                  }
+                  if (!jQuery.isEmptyObject(resultObj.gallery)) {
+                    var carouselcontent = '';
+                    count = resultObj.gallery.length;
+                    for (i = 0; i < count; i++) {
+                      carouselcontent += '<li class="image"><a class="thumb-link" title="' + resultObj.name + '" data-image-index="' + i + '">' + resultObj.gallery[i] + '</a></li>';
+                    }
+                    if (!jQuery.isEmptyObject(resultObj.videos)) {
+                      count = resultObj.videos.length;
+                      for (i = 0; i < count; i++) {
+                        carouselcontent += "<li class='video' id='" + resultObj.videos[i].id + "'><input type='hidden' id='video_" + resultObj.videos[i].id + "' value='" + resultObj.videos[i].code + "'/>" + resultObj.videos[i].image + "</li>";
+                      }
+                    }
+                    jQuery("#product-carousel-pdp").empty();
+                    jQuery("#product-carousel-pdp").append(carouselcontent);
+                    var owl = jQuery('#product-carousel-pdp');
+                    owl.data('owlCarousel').reinit({
+                      navigation: true,
+                      navigationText: ["<i class='fa fa-angle-left'></i>", "<i class='fa fa-angle-right'></i>"],
+                      items: 3,
+                      itemsDesktop: [1199, 3],
+                      itemsDesktopSmall: [414, 3],
+                      itemsTablet: [768, 3],
+                      itemsMobile: [375, 3],
+                    });
+                    jQuery('#product-carousel-pdp a:first-child').trigger('click');
+                  }
+                  if (!jQuery.isEmptyObject(resultObj.relatedhtml)) {
+                    jQuery("#relatedhtml").html(resultObj.relatedhtml);
+                  } else {
+                    jQuery(".block-title").html("");
+                    jQuery(".sub-title").html("");
+                  }
+                  if (!jQuery.isEmptyObject(resultObj.related)) {
+                    var relatedContent = '';
+                    count = resultObj.related.length;
+                    for (i = 0; i < count; i++) {
+                      relatedContent += ' <div class="owl-item" style="width: 320px;">' + '<a href="' + resultObj.related[i].url + '" id="prdurl">' + '<div class="image">' + resultObj.related[i].image + '</div>' + '<div class="caption">' + '<h4 class="product-title">' + resultObj.related[i].name + '</h4>' + '<div class="caption-overlay">' + '<p>' + resultObj.related[i].desc + '</p>' + '<div class="shop-now">Shop Now </div>' + '</div>' + '<div class="caption-content">' + '<p class="product-price">' + resultObj.related[i].price + '</p></div></div></a></div>';
+                    }
+                    jQuery("#product-carousel").empty();
+                    jQuery("#product-carousel").append(relatedContent);
+                    var owl = jQuery('#product-carousel');
+                    owl.data('owlCarousel').reinit({
+                      navigation: true,
+                      navigationText: ["<i class='fa fa-angle-left'></i>", "<i class='fa fa-angle-right'></i>"],
+                      items: 3,
+                      itemsDesktop: [1199, 3],
+                      itemsDesktopSmall: [414, 3],
+                      itemsTablet: [768, 2],
+                      itemsMobile: [375, 1],
+                    });
+                  }
+                },
+                error: function() {
+                  jQuery("#ajaxloader-outer").hide();
+                }
+              });
+            }
+          });
+        });
+      });
+      jQuery(document).on('click', '.product-image-thumbs .thumb-link', function(e) {
+        e.preventDefault();
+        var jlink = jQuery(this);
+        var target = jQuery('#image-' + jlink.data('image-index'));
+        ProductMediaManager.swapImage(target);
+      });
+      jQuery(document).ready(function() {
+        if (jQuery('body').hasClass('catalog-product-view')) {
+          var readtab = jQuery('#murad-read-tab').val();
+          jQuery('.read-label').each(function(index, value) {
+            jQuery(this).attr("href", "javascript:void(0);");
+            jQuery(this).attr("target", "");
+          });
+          jQuery('.read-label').click(function() {
+            if (jQuery(this).hasClass('read-review')) {
+              show_reviews('review');
+            } else {
+              show_reviews('qa');
+            }
+          });
+          if (readtab != "") {
+            if (readtab == 1) {
+              show_reviews('review');
+            } else {
+              show_reviews('qa');
+            }
+          }
+        }
+      });
+    });
   }
 }
-
 </script>
 
 <style>
